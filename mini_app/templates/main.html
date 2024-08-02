@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7HVCD2TG7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-S7HVCD2TG7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <div class="coins">
+                <span class="coin-amount">0</span>
+                <span class="currency">{{ translation['currency'] }}</span>
+            </div>
+            <div class="lang-selector">
+                <select id="language-dropdown">
+                    <option value="en" {% if lang == 'en' %}selected{% endif %}>EN</option>
+                    <option value="ru" {% if lang == 'ru' %}selected{% endif %}>RU</option>
+                    <option value="es" {% if lang == 'es' %}selected{% endif %}>ES</option>
+                </select>
+            </div>
+        </div>
+        <div class="wallet-container" id="wallet-container">
+            <!-- Контейнер для отображения кошелька или поля ввода -->
+        </div>
+        <div class="news-slider">
+            <div class="news-slide">
+                <!-- Слайды новостей будут добавлены сюда через JavaScript -->
+            </div>
+            <div class="slider-dots">
+                <!-- Точки будут добавлены сюда через JavaScript -->
+            </div>
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <div class="nav-item" data-target="/main">
+            <span class="material-icons-outlined">home</span>
+            <span>{{ translation['home'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/leaderboard">
+            <span class="material-icons-outlined">leaderboard</span>
+            <span>{{ translation['leaderboard'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/friends">
+            <span class="material-icons-outlined">group</span>
+            <span>{{ translation['friends'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/tasks">
+            <span class="material-icons-outlined">check_circle_outline</span>
+            <span>{{ translation['tasks'] }}</span>
+        </div>
+    </div>
+</body>
+</html>

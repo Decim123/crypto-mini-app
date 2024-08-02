@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7HVCD2TG7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-S7HVCD2TG7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/start.css') }}">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="{{ url_for('static', filename='js/start.js') }}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div id="digits_container"></div>
+        <div id="tgr_text" class="zoom-in-hidden">TGR</div>
+        <div id="received_text" class="zoom-in-hidden">received!</div>
+        <form id="claim_form" action="{{ url_for('register') }}" method="post">
+            <input type="hidden" name="tg_id" id="tg_id">
+            <input type="hidden" name="username" id="username">
+            <input type="hidden" name="coins" id="coins">
+        </form>
+    </div>
+</body>
+</html>

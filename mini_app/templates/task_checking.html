@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7HVCD2TG7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-S7HVCD2TG7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Checking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/task_checking.css') }}">
+</head>
+<body>
+    <div class="container">
+        {% for task_check in task_checks %}
+        <div class="task-check">
+            <p>{{ tasks[task_check.task_id][1] }}</p> <!-- Отображение текста задания -->
+            <img src="{{ task_check.screen_url }}" alt="screenshot">
+            <div class="buttons">
+                <button onclick="acceptTask('{{ task_check.tg_id }}', '{{ task_check.task_id }}', '{{ task_check.reward }}', '{{ task_check.screen_path }}')">Accept</button>
+                <button onclick="rejectTask('{{ task_check.tg_id }}', '{{ task_check.task_id }}', '{{ task_check.screen_path }}')">Reject</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function acceptTask(tg_id, task_id, reward, screen) {
+            fetch('/accept_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tg_id, task_id, reward, screen })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.status === 'success') {
+                      location.reload();
+                  }
+              });
+        }
+
+        function rejectTask(tg_id, task_id, screen) {
+            fetch('/reject_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tg_id, task_id, screen })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.status === 'success') {
+                      location.reload();
+                  }
+              });
+        }
+    </script>
+</body>
+</html>

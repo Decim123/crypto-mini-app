@@ -1,0 +1,6 @@
+aiogram
+environs
+telegram
+apscheduler
+Flask-Babel
+

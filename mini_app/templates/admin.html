@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7HVCD2TG7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-S7HVCD2TG7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tg = window.Telegram.WebApp;
+            tg.expand(); // Расширить приложение на весь экран
+        });
+
+        function changeTaskStatus(taskId, status) {
+            fetch(`/change_task_status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: taskId, status: status })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.status === 'success') {
+                      location.reload();
+                  }
+              });
+        }
+
+        function deleteNews(newsId) {
+            fetch(`/delete_news`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: newsId })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.status === 'success') {
+                      location.reload();
+                  }
+              });
+        }
+    </script>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <div class="container">
+        <div class="admin-actions">
+            <button onclick="window.location.href='/task_checking?password=123'" class="task-icon">
+                <span class="material-icons-outlined">assignment_turned_in</span>
+            </button>
+        </div>
+
+        <div class="news">
+            <h2>Create News</h2>
+            <form id="create_news_form" action="{{ url_for('create_news') }}" method="post">
+                <input type="text" name="text" placeholder="News Text" required>
+                <input type="url" name="link" placeholder="Link">
+                <button type="submit">Create News</button>
+            </form>
+        </div>
+
+        <div class="active_news">
+            <h2>Active News</h2>
+            <ul>
+                {% for news in active_news %}
+                <li>
+                    <span>{{ news[1] }}</span>
+                    {% if news[2] %}
+                    <a href="{{ news[2] }}" class="link-button">Link</a>
+                    {% else %}
+                    <span class="no-link-button">No Link</span>
+                    {% endif %}
+                    <span onclick="deleteNews({{ news[0] }})" class="status-button">🗑️</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="tasks">
+            <h2>Create Task</h2>
+            <form id="create_task_form" action="{{ url_for('create_task_route') }}" method="post">
+                <input type="text" name="text" placeholder="Task Text" required>
+                <input type="number" name="reward" placeholder="Reward Amount" required>
+                <input type="url" name="link" placeholder="Link" required>
+                <button type="submit">Create Task</button>
+            </form>
+        </div>
+
+        <div class="active_tasks">
+            <h2>Active Tasks</h2>
+            <ul>
+                {% for task in active_tasks %}
+                <li>
+                    <span><b>{{ task[1] }}</b></span>
+                    <span><b>{{ task[2] }}</b></span>
+                    <a href="{{ task[3] }}" class="link-button">Link</a>
+                    <span onclick="changeTaskStatus({{ task[0] }}, 'inactive')" class="status-button">❌</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="inactive_tasks">
+            <h2>Inactive Tasks</h2>
+            <ul>
+                {% for task in inactive_tasks %}
+                <li>
+                    <span>{{ task[1] }}</span>
+                    <span>{{ task[2] }}</span>
+                    <a href="{{ task[3] }}" class="link-button">Link</a>
+                    <span onclick="changeTaskStatus({{ task[0] }}, 'active')" class="status-button">✅</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Telegram ID</th>
+                        <th>Username</th>
+                        <th>Coins</th>
+                        <th>Leaderboard Place</th>
+                        <th>Available Tasks</th>
+                        <th>Completed Tasks</th>
+                        <th>Language</th>
+                        <th>Wallet</th>
+                        <th>Ref Count</th>
+                        <th>Ref Names</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user[0] }}</td>
+                        <td>{{ user[1] }}</td>
+                        <td>{{ user[2] }}</td>
+                        <td>{{ user[3] }}</td>
+                        <td>{{ user[4] }}</td>
+                        <td>{{ user[5] }}</td>
+                        <td>{{ user[6] }}</td>
+                        <td>{{ user[7] }}</td>
+                        <td>{{ user[8] }}</td>
+                        <td>{{ user[9] }}</td>
+                        <td>{{ user[10] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

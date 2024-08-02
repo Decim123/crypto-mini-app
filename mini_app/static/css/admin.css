@@ -1,0 +1,167 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #e0e5ec;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+    overflow-y: auto;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+    background: #e0e5ec;
+    border-radius: 20px;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.admin-actions {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.admin-actions button {
+    background: #e0e5ec;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.admin-actions button:hover {
+    transform: scale(1.1);
+    box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff;
+}
+
+.material-icons-outlined {
+    font-size: 24px;
+    color: #666;
+}
+
+.news, .active_news, .tasks, .active_tasks, .inactive_tasks {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.news form, .tasks form, .active_news ul, .active_tasks ul, .inactive_tasks ul {
+    background: #f0f0f3;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
+}
+
+.news form input, .tasks form input {
+    display: block;
+    width: 90%;
+    margin: 2% 0;
+    padding: 4%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+}
+
+.news form button, .tasks form button {
+    display: block;
+    width: 90%;
+    margin: 4% 4%;
+    padding: 4%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #11bfeb52;
+}
+
+.active_news ul li, .active_tasks ul li, .inactive_tasks ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 2% 2%;
+    background: #e0e5ec;
+    border-radius: 10px;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
+}
+
+.link-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 2%;
+    text-decoration: none;
+    box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.link-button:hover {
+    background-color: #0056b3;
+}
+
+.no-link-button {
+    background-color: #cccccc;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 2%;
+    text-decoration: none;
+    box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff;
+}
+
+.status-button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+thead {
+    background: #f0f0f3;
+}
+
+thead th {
+    padding: 10px;
+    background: #e0e5ec;
+    box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+    border-radius: 10px;
+}
+
+tbody tr {
+    transition: background 0.3s;
+}
+
+tbody tr:hover {
+    background: #f0f0f3;
+}
+
+tbody td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}

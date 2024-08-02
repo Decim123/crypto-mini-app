@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7HVCD2TG7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-S7HVCD2TG7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ translation['friends'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/friends.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ translation['friends'] }}</h1>
+        <p class="ref-count">{{ ref_count }}</p>
+        <div class="ref-info">
+            <h2>{{ translation['ref_link'] }}:</h2>
+            <p><a href="https://t.me/TestHanna47gBot?start={{ user[1] }}" id="referral-link">https://t.me/TestHanna47gBot?start={{ user[1] }}</a></p>
+        </div>
+        <div class="reward-slider">
+            <div class="reward-slide">
+                <h2>{{ translation['invited_friends'] }} (1 - 10)</h2>
+                <p>{{ translation['telegram_premium_user'] }}: 500 {{ translation['currency'] }}</p>
+                <p>{{ translation['simple_user'] }}: 250 {{ translation['currency'] }}</p>
+            </div>
+            <div class="reward-slide">
+                <h2>{{ translation['invited_friends'] }} (11 - 50)</h2>
+                <p>{{ translation['telegram_premium_user'] }}: 750 {{ translation['currency'] }}</p>
+                <p>{{ translation['simple_user'] }}: 500 {{ translation['currency'] }}</p>
+            </div>
+            <div class="reward-slide">
+                <h2>{{ translation['invited_friends'] }} (101+)</h2>
+                <p>{{ translation['telegram_premium_user'] }}: 1250 {{ translation['currency'] }}</p>
+                <p>{{ translation['simple_user'] }}: 1000 {{ translation['currency'] }}</p>
+            </div>
+            <div class="slider-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <div class="nav-item" data-target="/main">
+            <span class="material-icons-outlined">home</span>
+            <span>{{ translation['home'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/leaderboard">
+            <span class="material-icons-outlined">leaderboard</span>
+            <span>{{ translation['leaderboard'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/friends">
+            <span class="material-icons-outlined">group</span>
+            <span>{{ translation['friends'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/tasks">
+            <span class="material-icons-outlined">check_circle_outline</span>
+            <span>{{ translation['tasks'] }}</span>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tg_id = '{{ user[1] }}';  // Передаем tg_id напрямую из шаблона
+
+            document.querySelectorAll('.nav-item').forEach(function(navItem) {
+                navItem.addEventListener('click', function() {
+                    const target = navItem.getAttribute('data-target');
+                    if (target === '/leaderboard' || target === '/friends' || target === '/tasks' || target === '/main') {
+                        window.location.href = `${target}?tg_id=${tg_id}`;
+                    } else {
+                        window.location.href = target;
+                    }
+                });
+            });
+
+            const slides = document.querySelectorAll('.reward-slide');
+            const dots = document.querySelectorAll('.dot');
+            let currentIndex = 0;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.style.display = (i === index) ? 'block' : 'none';
+                    dots[i].classList.toggle('active', i === index);
+                });
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slides.length;
+                showSlide(currentIndex);
+            }
+
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                showSlide(currentIndex);
+            }
+
+            let startX = 0;
+
+            document.querySelector('.reward-slider').addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+
+            document.querySelector('.reward-slider').addEventListener('touchend', (e) => {
+                const endX = e.changedTouches[0].clientX;
+                if (startX > endX + 30) {
+                    nextSlide();
+                } else if (startX < endX - 30) {
+                    prevSlide();
+                }
+            });
+
+            showSlide(currentIndex);
+
+            function copyReferralLink() {
+                const referralLink = document.getElementById('referral-link').href;
+                navigator.clipboard.writeText(referralLink).catch(function() {
+                    console.error('Copy failed');
+                });
+            }
+
+            document.getElementById('referral-link').addEventListener('click', function(event) {
+                event.preventDefault();
+                copyReferralLink();
+            });
+        });
+    </script>
+</body>
+</html>

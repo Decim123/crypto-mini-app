@@ -1,0 +1,64 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0e5ec;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.container {
+    text-align: center;
+}
+
+.digit {
+    display: inline-block;
+    font-size: 4em;
+    margin: 0 10px;
+    opacity: 0;
+    transform: scale(0);
+    animation: zoomIn 0.5s forwards;
+}
+
+.zoom-in-hidden {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.zoom-in {
+    animation: zoomIn 0.5s forwards;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#tgr_text {
+    font-size: 2em;
+    margin-top: 20px;
+    animation-delay: 0.2s;
+}
+
+#received_text {
+    font-size: 1.2em;
+    margin-top: 10px;
+    color: #666;
+    animation-delay: 0.2s;
+}
+
+.hidden {
+    display: none;
+}

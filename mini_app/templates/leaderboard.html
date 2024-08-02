@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7HVCD2TG7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-S7HVCD2TG7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ translation['leaderboard'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/leaderboard.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="total-users-container">
+                <div class="total-users">
+                    {{ total_users }}
+                    <div class="green-circle"></div>
+                </div>
+            </div>
+            <h1>{{ translation['leaderboard'] }}</h1>
+        </div>
+        {% if user and user[2] %}
+        <div class="current-user">
+            <div class="user-avatar-initials" style="background-color: {{ user[2][:2]|initials_color }};">{{ user[2][:2].upper() }}</div>
+            <div class="user-info">
+                <span class="username">{{ user[2] }}</span>
+                <span class="coins">{{ user[3] }} {{ translation['currency'] }}</span>
+                <span class="user-rank">#{{ user_rank }}</span>
+            </div>
+        </div>
+        {% endif %}
+        <div class="leaderboard">
+            {% for top_user in top_users %}
+                <div class="leaderboard-item">
+                    <div class="user-avatar-initials" style="background-color: {{ top_user[1][:2]|initials_color }};">{{ top_user[1][:2].upper() }}</div>
+                    <div class="user-info">
+                        <span class="username">{{ top_user[1] }}</span>
+                        <span class="coins">{{ top_user[2] }} {{ translation['currency'] }}</span>
+                        <span class="user-rank">#{{ loop.index }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <div class="nav-item" data-target="/main">
+            <span class="material-icons-outlined">home</span>
+            <span>{{ translation['home'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/leaderboard">
+            <span class="material-icons-outlined">leaderboard</span>
+            <span>{{ translation['leaderboard'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/friends">
+            <span class="material-icons-outlined">group</span>
+            <span>{{ translation['friends'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/tasks">
+            <span class="material-icons-outlined">check_circle_outline</span>
+            <span>{{ translation['tasks'] }}</span>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tg_id = '{{ user[1] }}';  // Вставка tg_id из шаблона
+
+            document.querySelectorAll('.nav-item').forEach(function(navItem) {
+                navItem.addEventListener('click', function() {
+                    const targetPage = navItem.getAttribute('data-target');
+                    if (targetPage === '/leaderboard' || targetPage === '/friends' || targetPage === '/tasks'|| targetPage === '/main') {
+                        window.location.href = `${targetPage}?tg_id=${tg_id}`;
+                    } else {
+                        window.location.href = `${targetPage}`;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

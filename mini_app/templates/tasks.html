@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7HVCD2TG7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-S7HVCD2TG7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ translation['tasks'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tasks.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="material-icons-outlined" style="font-size: 5em;">assignment</span>
+        </div>
+        <div class="tasks-list">
+            {% for task in available_tasks %}
+                <div class="task-item {% if task_statuses[task[0]] == 'completed' %}completed{% endif %}">
+                    <span class="task-text">{{ task[1] }}</span>
+                    <div class="task-actions">
+                        {% if task_statuses[task[0]] == 'link' %}
+                            <a href="{{ task[3] }}" class="task-link" onclick="recordTaskCheck(event, '{{ tg_id }}', '{{ task[0] }}', '{{ task[2] }}', '{{ task[3] }}')">{{ task[2] }} {{ translation['currency'] }}</a>
+                        {% elif task_statuses[task[0]] == 'upload' %}
+                            <input type="file" class="upload-screenshot" id="upload-{{ task[0] }}" accept="image/*" style="display: none;" onchange="uploadScreenshot('{{ tg_id }}', '{{ task[0] }}')">
+                            <label for="upload-{{ task[0] }}" class="upload-label" id="label-{{ task[0] }}">
+                                <span class="material-icons-outlined">attachment</span>
+                            </label>
+                        {% elif task_statuses[task[0]] == 'screenshot' %}
+                            <button class="loading-button" id="loading-{{ task[0] }}">
+                                <span class="dot">.</span>
+                                <span class="dot">.</span>
+                                <span class="dot">.</span>
+                            </button>
+                        {% elif task_statuses[task[0]] == 'completed' %}
+                            <button class="task-completed-button" disabled>{{ task[2] }} {{ translation['currency'] }}</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <div class="nav-item" data-target="/main">
+            <span class="material-icons-outlined">home</span>
+            <span>{{ translation['home'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/leaderboard">
+            <span class="material-icons-outlined">leaderboard</span>
+            <span>{{ translation['leaderboard'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/friends">
+            <span class="material-icons-outlined">group</span>
+            <span>{{ translation['friends'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/tasks">
+            <span class="material-icons-outlined">check_circle_outline</span>
+            <span>{{ translation['tasks'] }}</span>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <div class="nav-item" data-target="/main">
+            <span class="material-icons-outlined">home</span>
+            <span>{{ translation['home'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/leaderboard">
+            <span class="material-icons-outlined">leaderboard</span>
+            <span>{{ translation['leaderboard'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/friends">
+            <span class="material-icons-outlined">group</span>
+            <span>{{ translation['friends'] }}</span>
+        </div>
+        <div class="nav-item" data-target="/tasks">
+            <span class="material-icons-outlined">check_circle_outline</span>
+            <span>{{ translation['tasks'] }}</span>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tg_id = '{{ tg_id }}';
+    
+            document.querySelectorAll('.nav-item').forEach(function(navItem) {
+                navItem.addEventListener('click', function() {
+                    const targetPage = navItem.getAttribute('data-target');
+                    if (targetPage === '/leaderboard' || targetPage === '/friends' || targetPage === '/tasks'|| targetPage === '/main') {
+                        window.location.href = `${targetPage}?tg_id=${tg_id}`;
+                    } else {
+                        window.location.href = `${targetPage}`;
+                    }
+                });
+            });
+    
+            // Функция для обновления задач
+            function refreshTasks() {
+                fetch(`/get_tasks?tg_id=${tg_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            console.error(data.error);
+                            return;
+                        }
+                        
+                        const tasksList = document.querySelector('.tasks-list');
+                        tasksList.innerHTML = '';
+                        
+                        data.tasks.forEach(task => {
+                            const taskItem = document.createElement('div');
+                            taskItem.className = `task-item ${data.statuses[task[0]] === 'completed' ? 'completed' : ''}`;
+                            
+                            const taskText = document.createElement('span');
+                            taskText.className = 'task-text';
+                            taskText.innerText = task[1];
+                            taskItem.appendChild(taskText);
+                            
+                            const taskActions = document.createElement('div');
+                            taskActions.className = 'task-actions';
+                            
+                            if (data.statuses[task[0]] === 'link') {
+                                const taskLink = document.createElement('a');
+                                taskLink.href = task[3];
+                                taskLink.className = 'task-link';
+                                taskLink.onclick = function(event) {
+                                    recordTaskCheck(event, tg_id, task[0], task[2], task[3]);
+                                };
+                                taskLink.innerText = `${task[2]} {{ translation['currency'] }}`;
+                                taskActions.appendChild(taskLink);
+                            } else if (data.statuses[task[0]] === 'upload') {
+                                const fileInput = document.createElement('input');
+                                fileInput.type = 'file';
+                                fileInput.className = 'upload-screenshot';
+                                fileInput.id = `upload-${task[0]}`;
+                                fileInput.accept = 'image/*';
+                                fileInput.style.display = 'none';
+                                fileInput.onchange = function() {
+                                    uploadScreenshot(tg_id, task[0]);
+                                };
+                                taskActions.appendChild(fileInput);
+                                
+                                const uploadLabel = document.createElement('label');
+                                uploadLabel.htmlFor = `upload-${task[0]}`;
+                                uploadLabel.className = 'upload-label';
+                                uploadLabel.id = `label-${task[0]}`;
+                                const attachmentIcon = document.createElement('span');
+                                attachmentIcon.className = 'material-icons-outlined';
+                                attachmentIcon.innerText = 'attachment';
+                                uploadLabel.appendChild(attachmentIcon);
+                                taskActions.appendChild(uploadLabel);
+                            } else if (data.statuses[task[0]] === 'screenshot') {
+                                const loadingButton = document.createElement('button');
+                                loadingButton.className = 'loading-button';
+                                loadingButton.id = `loading-${task[0]}`;
+                                ['.', '.', '.'].forEach(dot => {
+                                    const dotSpan = document.createElement('span');
+                                    dotSpan.className = 'dot';
+                                    dotSpan.innerText = dot;
+                                    loadingButton.appendChild(dotSpan);
+                                });
+                                taskActions.appendChild(loadingButton);
+                            } else if (data.statuses[task[0]] === 'completed') {
+                                const completedButton = document.createElement('button');
+                                completedButton.className = 'task-completed-button';
+                                completedButton.disabled = true;
+                                completedButton.innerText = `${task[2]} {{ translation['currency'] }}`;
+                                taskActions.appendChild(completedButton);
+                            }
+                            
+                            taskItem.appendChild(taskActions);
+                            tasksList.appendChild(taskItem);
+                        });
+                    });
+            }
+    
+            // Обновляем задачи каждые 10 секунд
+            setInterval(refreshTasks, 10000);
+            
+            function recordTaskCheck(event, tg_id, task_id, reward, link) {
+                event.preventDefault();
+    
+                fetch('/record_task_check', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ tg_id: tg_id, task_id: task_id, reward: reward })
+                }).then(response => response.json())
+                  .then(data => {
+                      if (data.status === 'success') {
+                          window.open(link, '_blank');
+                      }
+                  });
+            }
+    
+            function uploadScreenshot(tg_id, task_id) {
+                const fileInput = document.getElementById(`upload-${task_id}`);
+                const formData = new FormData();
+                formData.append('tg_id', tg_id);
+                formData.append('task_id', task_id);
+                formData.append('screenshot', fileInput.files[0]);
+    
+                fetch('/upload_screenshot', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json())
+                  .then(data => {
+                      if (data.status === 'success') {
+                          const uploadLabel = document.getElementById(`label-${task_id}`);
+                          const loadingButton = document.getElementById(`loading-${task_id}`);
+                          uploadLabel.style.display = 'none';
+                          loadingButton.style.display = 'flex';
+                      }
+                  });
+            }
+        });
+    </script>
+    
+</body>
+</html>

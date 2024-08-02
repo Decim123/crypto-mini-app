@@ -1,0 +1,197 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #e0e5ec;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    text-align: center;
+    padding: 5%;
+    flex: 1;
+    overflow-y: auto; /* Enable scrolling for the leaderboard */
+    margin-bottom: -3%; /* Установите отрицательный отступ, чтобы перекрыть белую полоску */
+}
+
+
+.header {
+    display: flex;
+    justify-content:left;
+    align-items: center;
+    margin-bottom: 0%;
+}
+
+h1 {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 2%;
+}
+
+
+.total-users-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.total-users {
+    background-color: #ffffff;
+    color: #333;
+    font-size: 1.2em;
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff; /* Neomorphic shadow */
+    display: inline-block;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.green-circle {
+    background-color: #4CAF50;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+.current-user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e0e5ec;
+    border-radius: 20px;
+    padding: 10px 20px;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff; /* Neomorphic shadow */
+    margin-bottom: 0px;
+    width: 100%;
+    max-width: 90%;
+    margin: 20px auto; /* Center the current user block */
+    position: relative;
+}
+
+.current-user::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 2px;
+    background: #00000079;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    background: #e0e5ec;
+    border-radius: 20px;
+    padding: 10px 20px;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff; /* Neomorphic shadow */
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 90%;
+    margin: 10px auto; /* Center the leaderboard items */
+}
+
+.user-avatar-initials {
+    color: #ffffff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    margin-right: 10px;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff; /* Neomorphic shadow */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    flex: 1; /* Allow user info to take remaining space */
+}
+
+.username {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-right: 4%;
+    display: inline-block;
+    max-width: 30%; /* Установите максимальную ширину */
+    white-space: nowrap; /* Запрещает перенос текста на новую строку */
+    overflow: hidden; /* Скрывает текст, выходящий за пределы контейнера */
+    text-overflow: ellipsis; /* Добавляет троеточие для скрытого текста */
+    vertical-align: bottom; /* Выравнивание по вертикали */
+}
+
+.coins {
+    font-size: 100%;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.user-rank {
+    font-size: 2em;
+    font-weight: bold;
+    opacity: 0.5;
+    height: 90%;
+    display: flex;
+    align-items:self-end;
+    padding-left: 10%;
+}
+
+.rank {
+    margin-left: auto;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #e0e5ec;
+    padding: 10px 0;
+    margin: 0; /* Убедитесь, что здесь нет отступов */
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #333;
+    font-size: 12px;
+    transition: transform 0.2s;
+    background: #e0e5ec; /* Background of nav item */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff; /* Neomorphic shadow */
+    padding: 10px;
+    width: 50px; /* Set a fixed width for all nav items */
+    height: 50px; /* Set a fixed height for all nav items */
+    margin: 5px; /* Add some margin for spacing */
+}
+
+.nav-item .material-icons-outlined {
+    font-size: 24px;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.nav-item span {
+    opacity: 0.7;
+}
+
+.nav-item:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+    box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff; /* Lift effect on hover */
+}
