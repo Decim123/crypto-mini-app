@@ -8,7 +8,7 @@ from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 init_db()
-app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'mini_app', 'screenshots')
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'screenshots')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Настройка логгирования
@@ -452,12 +452,14 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(func=auto_accept_tasks, trigger="interval", hours=1)
 scheduler.start()
 
+# Создаём WSGI-приложение
+wsgi_app = app
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
     handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
     handler.setLevel(logging.ERROR)
     app.logger.addHandler(handler)
+    app.run(host='0.0.0.0', port=5000)
 
 @app.errorhandler(500)
 def internal_error(error):
