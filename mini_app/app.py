@@ -4,6 +4,7 @@ import logging, os, datetime, sqlite3
 from apscheduler.schedulers.background import BackgroundScheduler
 import importlib
 import sqlite3
+from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 init_db()
@@ -451,5 +452,18 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(func=auto_accept_tasks, trigger="interval", hours=1)
 scheduler.start()
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+
+if __name__ != "__main__":
+    handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
+    handler.setLevel(logging.ERROR)
+    app.logger.addHandler(handler)
+
+@app.errorhandler(500)
+def internal_error(error):
+    app.logger.error('Server Error: %s', (error))
+    return "500 error", 500
+
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    app.logger.error('Unhandled Exception: %s', (e))
+    return "500 error", 500
